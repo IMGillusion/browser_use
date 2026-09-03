@@ -1,0 +1,27 @@
+# browser_use 子项目配置（浏览器自动化）
+# 用 browser-use 库驱动 headless chromium：既能脚本式直接操作页面，
+# 也能挂 LLM 跑自主 Agent（打开网页 → 自己点/搜/提取 → 回话）。
+# 按需子项目（persistent: false），不常驻，幻日要用的时候跑 smoke_test.py。
+
+browser:
+  headless: true                # 无界面模式（服务器环境）
+  viewport: [1920, 1200]
+  disable_default_extensions: 1 # 关键坑：默认扩展(uBlock 等)启动时要联网下载，
+                                # 本机拉 github CDN 很慢/超时，会把启动卡死。
+                                # 设 BROWSER_USE_DISABLE_EXTENSIONS=1 跳过。
+                                # 需要广告拦截时改成 0。
+  # 浏览器可执行文件：playwright chromium（.venv 里已装）
+  # 若本机没有 chromium，先跑：.venv/bin/python -m playwright install chromium
+
+# LLM（--agent 自主闭环用，走 litellm 代理）
+# 端点本机可直连（2026-09-01 实测 /v1/models 有 qwen3.8-27b）
+llm:
+  model: "qwen3.8-27b"
+  base_url: "http://127.0.0.1:9000/v1"    # 占位：换成你自己的 LLM 端点，或设 BU_LLM_BASE 覆盖
+  api_key: "sk-mykey"           # litellm 代理的固定 key，不是真密钥
+  # 环境变量覆盖（优先级更高）：BU_LLM_MODEL / BU_LLM_BASE / BU_LLM_KEY
+
+# 冒烟/运行入口
+entrypoint: "smoke_test.py"
+# 默认验证页（smoke test 打开它证明浏览器能起、能联网、能读页）
+smoke_url: "https://www.baidu.com"
