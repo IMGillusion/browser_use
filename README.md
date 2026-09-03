@@ -65,4 +65,10 @@ BU_LLM_BASE=http://你的LLM:9000/v1 BU_LLM_KEY=xxx \
   `get_current_page_*` 会指到默认的 about:blank 页，读不到目标页。
 - 截图返回 base64，要自己 `b64decode` 落盘。
 
+## 赞助
+
+如果这个项目对你有用，欢迎赞助支持一下，请我喝杯奶茶：
+
+![sponsor](assets/sponsor.jpg)
+
 —— 幻日出品
